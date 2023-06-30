@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/screens/add_task_screen.dart';
-import 'package:todolist/models/task.dart';
 import '../widgets/task_list.dart';
+import 'package:provider/provider.dart';
+import 'package:todolist/models/task_data.dart';
 
-class TasksScreen extends StatefulWidget {
+class TasksScreen extends StatelessWidget {
   const TasksScreen({super.key});
-
-  @override
-  State<TasksScreen> createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-  List<Task> tasks = [
-    Task(name: 'Buy milk'),
-    Task(name: 'Buy eggs'),
-    Task(name: 'Buy bread'),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +14,16 @@ class _TasksScreenState extends State<TasksScreen> {
       floatingActionButton: FloatingActionButton(
           onPressed: () {
             showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) => SingleChildScrollView(
-                    child: Container(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom),
-                        child: AddTaskScreen(addTaskCallback: (newTaskTitle) {
-                          setState(() {
-                            tasks.add(Task(name: newTaskTitle));
-                          });
-                          Navigator.pop(context);
-                        }))));
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: AddTaskScreen(),
+                ),
+              ),
+            );
           },
           backgroundColor: const Color.fromARGB(255, 236, 26, 57),
           child: const Icon(Icons.add)),
@@ -65,7 +53,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
                 const SizedBox(height: 5.0),
                 Text(
-                  '${tasks.length} Tasks',
+                  '${Provider.of<TaskData>(context).taskCount} Tasks',
                   style: const TextStyle(
                     fontSize: 18.0,
                     color: Colors.white,
@@ -83,7 +71,7 @@ class _TasksScreenState extends State<TasksScreen> {
                 ),
                 color: Colors.white,
               ),
-              child: TaskList(tasks: tasks),
+              child: TaskList(),
             ),
           ),
         ],

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todolist/models/task_data.dart';
 
 // ignore: must_be_immutable
 class AddTaskScreen extends StatelessWidget {
   String newTaskTitle = '';
-  final Function addTaskCallback;
 
-  AddTaskScreen({super.key, required this.addTaskCallback});
+  AddTaskScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,9 @@ class AddTaskScreen extends StatelessWidget {
               const SizedBox(height: 5.0),
               ElevatedButton(
                 onPressed: () {
-                  addTaskCallback(newTaskTitle);
+                  Provider.of<TaskData>(context, listen: false)
+                      .addTask(newTaskTitle);
+                  Navigator.pop(context);
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
